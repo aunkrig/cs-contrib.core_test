@@ -35,7 +35,7 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import de.unkrig.junitcs.CheckTest;
 
 /**
- * Test case for the {@link WrapMethodCheck}.
+ * Test case for the {@link WrapMethodCheck}. Requires the <a href="http://junit-cs.unkrig.de">junit-cs</a> framework.
  */
 public
 class WrapMethodCheckTest extends TestCase {
