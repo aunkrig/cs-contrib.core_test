@@ -88,17 +88,42 @@ class CppCommentAlignmentCheckTest extends TestCase {
         );
 
         CheckTest.assertNoWarnings(compilationUnit, new CppCommentAlignment());
+    }
+
+    @Test public void
+    testCppComments2() throws CheckstyleException {
         
-//        int lineno = 1;
-//        for (int i = compilationUnit.indexOf('\n'); i != -1; i = compilationUnit.indexOf('\n', i + 2), lineno++) {
-//            int j = compilationUnit.lastIndexOf("//", i);
-//            String cu2 = compilationUnit.substring(0, i) + ' ' + compilationUnit.substring(i);
-//            CheckTest.assertWarning(
-//                "Line " + lineno + ": " + cu2,
-//                "C++ comment must appear on column",
-//                cu2,
-//                new CppCommentAlignment()
-//            );
-//        }
+        String compilationUnit = (
+            ""
+            + "class              //\n"
+            + "Foo                //\n"
+            + "{                  //\n"
+            + "    void            //\n"
+            + "    method          //           5\n"
+            + "    () {            //\n"
+            + "        switch (3) { //\n"
+            + "        case 1:      //\n"
+            + "            break;    //\n"
+            + "        case 2:        //        10\n"
+            + "            break;      //\n"
+            + "        case 3: break;   //\n"
+            + "        case 4: break;   //\n"
+            + "        case 5: break;   //\n"
+            + "        }                 //     15\n"
+            + "        meth(              //\n"
+            + "            1,             //\n"
+            + "            meth2(         //\n"
+            + "                a\n"
+            + "            ),             //    20\n"
+            + "            2,             //\n"
+            + "            3              //\n"
+            + "        );                  //\n"
+            + "    }                        //\n"
+            + "}                             //\n"
+        );
+        
+        CheckTest.assertWarnings(null, new String[] {
+//            "10x38: C++ comment must appear on column 39, not 38",
+        }, compilationUnit, new CppCommentAlignment());
     }
 }
