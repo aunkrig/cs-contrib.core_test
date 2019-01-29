@@ -24,27 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.unkrig.cscontrib.checks;
+// SUPPRESS CHECKSTYLE Javadoc|LineLength:9999
 
-import junit.framework.TestCase;
+package de.unkrig.cscontrib.checks;
 
 import org.junit.Test;
 
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 
-import de.unkrig.junitcs.CheckTest;
+import de.unkrig.cscontrib.util.CheckStyleTest;
 
 /**
  * Test case for the {@link CppCommentAlignment} check.
  */
 public
-class CppCommentAlignmentCheckTest extends TestCase {
+class CppCommentAlignmentCheckTest extends CheckStyleTest {
 
     /**
      * Test that C++-style coments are properly aligned.
      */
     @Test public void
-    testCppComments() throws CheckstyleException {
+    testCppComments() {
 
         String compilationUnit = (
             ""
@@ -87,7 +87,7 @@ class CppCommentAlignmentCheckTest extends TestCase {
             + "}                                                     //\n"
         );
 
-        CheckTest.assertNoWarnings(compilationUnit, new CppCommentAlignment());
+        csTest(CppCommentAlignment.class, compilationUnit).assertNoMessages();
     }
 
     @Test public void
@@ -122,8 +122,6 @@ class CppCommentAlignmentCheckTest extends TestCase {
             + "}                             //\n"
         );
         
-        CheckTest.assertWarnings(null, new String[] {
-//            "10x38: C++ comment must appear on column 39, not 38",
-        }, compilationUnit, new CppCommentAlignment());
+        csTest(CppCommentAlignment.class, compilationUnit).assertNoMessages();
     }
 }
