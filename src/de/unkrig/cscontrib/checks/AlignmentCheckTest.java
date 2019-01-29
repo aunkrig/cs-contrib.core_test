@@ -24,21 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.unkrig.cscontrib.checks;
+// SUPPRESS CHECKSTYLE LineLength:9999
 
-import junit.framework.TestCase;
+package de.unkrig.cscontrib.checks;
 
 import org.junit.Test;
 
-import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
-
-import de.unkrig.junitcs.CheckTest;
+import de.unkrig.cscontrib.util.CheckStyleTest;
 
 /**
  * Test case for the {@link WrapMethodCheck}.
  */
 public
-class AlignmentCheckTest extends TestCase {
+class AlignmentCheckTest extends CheckStyleTest {
 
     private static final String PROPERLY_ALIGNED = (
         ""
@@ -107,140 +105,111 @@ class AlignmentCheckTest extends TestCase {
         + " }"
     );
 
+    private static final String[] APPLY_TO_ATTRIBUTE_NAMES = {
+        "applyToAssignments",
+        "applyToCaseGroupStatements",
+        "applyToFieldInitializer",
+        "applyToFieldName",
+        "applyToLocalVariableInitializer",
+        "applyToLocalVariableName",
+        "applyToMethodBody",
+        "applyToMethodName",
+        "applyToParameterName",
+    };
+
     /**
      * Test for the "{@code applyToAssignments}" property.
      */
     @Test public void
-    testApplyToAssignments() throws CheckstyleException {
-
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToAssignments(true);
-
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("21x14: '=' should be aligned with '=' in line 20", MISALIGNED, ac);
+    testApplyToAssignments() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToAssignments")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToAssignments")).assertMessages("21x14: '=' should be aligned with '=' in line 20");
     }
 
     /**
      * Test for the "{@code applyToCaseGroupStatements}" property.
      */
     @Test public void
-    testApplyToCaseGroupStatements() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToCaseGroupStatements(true);
-
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("25x19: 'x' should be aligned with 'break' in line 24", MISALIGNED, ac);
+    testApplyToCaseGroupStatements() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToCaseGroupStatements")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToCaseGroupStatements")).assertMessages("25x19: 'x' should be aligned with 'break' in line 24");
     }
 
     /**
      * Test for the "{@code applyToFieldInitializer}" property.
      */
     @Test public void
-    testApplyToFieldInitializer() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToFieldInitializer(true);
-
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("7x21: '=' should be aligned with '=' in line 6", MISALIGNED, ac);
+    testApplyToFieldInitializer() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToFieldInitializer")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToFieldInitializer")).assertMessages("7x21: '=' should be aligned with '=' in line 6");
     }
 
     /**
      * Test for the "{@code applyToFieldName}" property.
      */
     @Test public void
-    testApplyToFieldName() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToFieldName(true);
-        
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("4x13: 'field2' should be aligned with 'field1' in line 3", MISALIGNED, ac);
+    testApplyToFieldName() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToFieldName")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToFieldName")).assertMessages("4x13: 'field2' should be aligned with 'field1' in line 3");
     }
 
     /**
      * Test for the "{@code applyToLocalVariableInitializer}" property.
      */
     @Test public void
-    testApplyToLocalVariableInitializer() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToLocalVariableInitializer(true);
-        
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("18x26: '=' should be aligned with '=' in line 17", MISALIGNED, ac);
+    testApplyToLocalVariableInitializer() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToLocalVariableInitializer")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToLocalVariableInitializer")).assertMessages("18x26: '=' should be aligned with '=' in line 17");
     }
     
     /**
      * Test for the "{@code applyToLocalVariableName}" property.
      */
     @Test public void
-    testApplyToLocalVariableName() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToLocalVariableName(true);
-        
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("15x17: 'locvar2' should be aligned with 'locvar1' in line 14", MISALIGNED, ac);
+    testApplyToLocalVariableName() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToLocalVariableName")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToLocalVariableName")).assertMessages("15x17: 'locvar2' should be aligned with 'locvar1' in line 14");
     }
     
     /**
      * Test for the "{@code applyToMethodBody}" property.
      */
     @Test public void
-    testApplyToMethodBody() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToMethodBody(true);
-        
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("33x34: '{' should be aligned with '{' in line 32", MISALIGNED, ac);
+    testApplyToMethodBody() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToMethodBody")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToMethodBody")).assertMessages("33x34: '{' should be aligned with '{' in line 32");
     }
     
     /**
      * Test for the "{@code applyToMethodName}" property.
      */
     @Test public void
-    testApplyToMethodName() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToMethodName(true);
-        
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("30x18: 'meth2' should be aligned with 'meth1' in line 29", MISALIGNED, ac);
+    testApplyToMethodName() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToMethodName")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToMethodName")).assertMessages("30x18: 'meth2' should be aligned with 'meth1' in line 29");
     }
     
     /**
      * Test for the "{@code applyToParameterName}" property.
      */
     @Test public void
-    testApplyToParameterName() throws CheckstyleException {
-        
-        Alignment ac = newAlignmentCheck();
-        ac.setApplyToParameterName(true);
-        
-        CheckTest.assertNoWarnings(PROPERLY_ALIGNED, ac);
-        CheckTest.assertWarning("11x14: 'param2' should be aligned with 'param1' in line 10", MISALIGNED, ac);
+    testApplyToParameterName() {
+        csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToParameterName")).assertNoMessages();
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToParameterName")).assertMessages("11x14: 'param2' should be aligned with 'param1' in line 10");
     }
 
-    /**
-     * @return An AlignmentCheckTest with all "{@code applyTo...}" properties set to {@code false}
-     */
-    private static Alignment
-    newAlignmentCheck() {
-
-        Alignment ac = new Alignment();
-        ac.setApplyToAssignments(false);
-        ac.setApplyToCaseGroupStatements(false);
-        ac.setApplyToFieldInitializer(false);
-        ac.setApplyToFieldName(false);
-        ac.setApplyToLocalVariableInitializer(false);
-        ac.setApplyToLocalVariableName(false);
-        ac.setApplyToMethodBody(false);
-        ac.setApplyToMethodName(false);
-        ac.setApplyToParameterName(false);
-
-        return ac;
+    private String[]
+    only(String attributeName) {
+        
+        String[] result = new String[APPLY_TO_ATTRIBUTE_NAMES.length * 2];
+        
+        for (int i = 0; i < APPLY_TO_ATTRIBUTE_NAMES.length; i++) {
+            String an = APPLY_TO_ATTRIBUTE_NAMES[i];
+            
+            result[2 * i]     = an;
+            result[2 * i + 1] = String.valueOf(attributeName.equals(an));
+        }
+        
+        return result;
     }
 }

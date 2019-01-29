@@ -24,48 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// SUPPRESS CHECKSTYLE LineLength|Javadoc:9999
+/***/
+@NotNullByDefault
+package de.unkrig.cscontrib.util;
 
-package de.unkrig.cscontrib.checks;
-
-import org.junit.Test;
-
-import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
-
-import de.unkrig.cscontrib.util.CheckStyleTest;
-
-/**
- * Test all kinds of JAVA constructs
- */
-public
-class JavaTest extends CheckStyleTest {
-    
-    @Test public void
-    testSwitch() throws CheckstyleException {
-        
-        csTest(Whitespace.class, (
-            ""
-            + "public class Foo {\n"
-            + "    void method() {\n"
-            + "        switch (1) {\n"
-            + "        case 1:\n"
-            + "            break;\n"
-            + "        default:\n"
-            + "            break;\n"
-            + "        }\n"
-            + "    }\n"
-            + "}\n"
-        )).assertNoMessages();
-    }
-
-    @Test public void
-    testInterfaceDefaultMethod() throws CheckstyleException {
-
-        csTest(Whitespace.class, (
-            ""
-            + "public interface MyInterface {\n"
-            + "    default void method() {}\n"
-            + "}\n"
-        )).assertNoMessages();
-    }
-}
+import de.unkrig.commons.nullanalysis.NotNullByDefault;

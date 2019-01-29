@@ -24,70 +24,59 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package de.unkrig.cscontrib.checks;
+// SUPPRESS CHECKSTYLE Javadoc|LineLength:9999
 
-import junit.framework.TestCase;
+package de.unkrig.cscontrib.checks;
 
 import org.junit.Test;
 
-import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
-
-import de.unkrig.junitcs.CheckTest;
+import de.unkrig.cscontrib.util.CheckStyleTest;
 
 /**
  * Test case for the {@link WrapMethodCheck}. Requires the <a href="http://junit-cs.unkrig.de">junit-cs</a> framework.
  */
 public
-class WrapMethodCheckTest extends TestCase {
+class WrapMethodCheckTest extends CheckStyleTest {
 
     /**
      * A simple positive test.
      */
     @Test public void
-    testSimple() throws CheckstyleException {
+    testSimple() {
 
-        WrapMethodCheck wmc = new WrapMethodCheck();
-
-        CheckTest.assertNoWarnings(
-            (
-                ""
-                + "class Foo {\n"
-                + "    int\n"
-                + "    method() { System.out.println(\"HELLO\");\n}\n"
-                + "}"
-            ),
-            wmc
-        );
+        csTest(WrapMethodCheck.class, (
+            ""
+            + "class Foo {\n"
+            + "    int\n"
+            + "    method() { System.out.println(\"HELLO\");\n}\n"
+            + "}"
+        )).assertNoMessages();
     }
 
     /**
      * Test for the checking of the vertical alignment of a method declaration.
      */
     @Test public void
-    testAlignment() throws CheckstyleException {
+    testAlignment() {
 
         // The alignment check is not configurable, so only one (negative) check.
 
-        CheckTest.assertWarning(
-            "'method' must appear in column 5, not 6",
-            (
-                ""
-                + "class Foo {\n"
-                + "    int\n"
-                + "     method() { System.out.println(\"HELLO\");\n}\n"
-                + "}"
-            ),
-            new WrapMethodCheck()
-        );
+        csTest(WrapMethodCheck.class, (
+            ""
+            + "class Foo {\n"
+            + "    int\n"
+            + "     method() { System.out.println(\"HELLO\"); }\n" // <= Indentation is one SPACE too deep.
+            + "}"
+        )).assertMessages("3x6: 'method' must appear in column 5, not 6");
     }
 
     /**
      * Test for {@link WrapMethodCheck#setAllowMultipleArgsPerLine(boolean)}.
      */
     @Test public void
-    testAllowMultipleArgsPerLine() throws CheckstyleException {
+    testAllowMultipleArgsPerLine() {
 
-        String cuWithMultipleArgumentsPerLine = (
+        String multipleArgumentsPerLine = (
             ""
             + "class Foo {\n"
             + "    int\n"
@@ -99,7 +88,7 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        String cuWithoutMultipleArgumentsPerLine = (
+        String noMultipleArgumentsPerLine = (
             ""
             + "class Foo {\n"
             + "    int\n"
@@ -112,28 +101,25 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        WrapMethodCheck wmc = new WrapMethodCheck();
         
         // Default is "false".
-        CheckTest.assertWarning("Must wrap line before '\"HELLO\"'", cuWithMultipleArgumentsPerLine, wmc);
-        CheckTest.assertNoWarnings(cuWithoutMultipleArgumentsPerLine, wmc);
+        csTest(WrapMethodCheck.class, multipleArgumentsPerLine).assertMessages("5x21: Must wrap line before '\"HELLO\"'");
+        csTest(WrapMethodCheck.class, noMultipleArgumentsPerLine).assertNoMessages();
         
-        wmc.setAllowMultipleArgsPerLine(false);
-        CheckTest.assertWarning("Must wrap line before '\"HELLO\"'", cuWithMultipleArgumentsPerLine, wmc);
-        CheckTest.assertNoWarnings(cuWithoutMultipleArgumentsPerLine, wmc);
+        csTest(WrapMethodCheck.class, multipleArgumentsPerLine).addAttribute("allowMultipleArgsPerLine", "false").assertMessages("5x21: Must wrap line before '\"HELLO\"'");
+        csTest(WrapMethodCheck.class, noMultipleArgumentsPerLine).addAttribute("allowMultipleArgsPerLine", "false").assertNoMessages();
 
-        wmc.setAllowMultipleArgsPerLine(true);
-        CheckTest.assertNoWarnings(cuWithMultipleArgumentsPerLine, wmc);
-        CheckTest.assertNoWarnings(cuWithoutMultipleArgumentsPerLine, wmc);
+        csTest(WrapMethodCheck.class, multipleArgumentsPerLine).addAttribute("allowMultipleArgsPerLine", "true").assertNoMessages();
+        csTest(WrapMethodCheck.class, noMultipleArgumentsPerLine).addAttribute("allowMultipleArgsPerLine", "true").assertNoMessages();
     }
 
     /**
      * Test for {@link WrapMethodCheck#setAllowMultipleParametersPerLine(boolean)}.
      */
     @Test public void
-    testAllowMultipleParametersPerLine() throws CheckstyleException {
+    testAllowMultipleParametersPerLine() {
         
-        String allParametersInOneLine = (
+        final String allParametersInOneLine = (
             ""
             + "class Foo {\n"
             + "    int\n"
@@ -141,7 +127,7 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        String oneLinePerParameter = (
+        final String oneLinePerParameter = (
             ""
             + "class Foo {\n"
             + "    int\n"
@@ -152,7 +138,7 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        String multipleParametersInOneLine = (
+        final String multipleParametersInOneLine = (
             ""
             + "class Foo {\n"
             + "    int\n"
@@ -162,29 +148,25 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        WrapMethodCheck wmc = new WrapMethodCheck();
+        // Default for "allowMultipleParametersPerLine" is "false".
+        csTest(WrapMethodCheck.class, allParametersInOneLine).assertNoMessages();
+        csTest(WrapMethodCheck.class, oneLinePerParameter).assertNoMessages();
+        csTest(WrapMethodCheck.class, multipleParametersInOneLine).assertMessages("4x16: Must wrap line before 'int'");
         
-        // Default is "false".
-        CheckTest.assertNoWarnings(allParametersInOneLine, wmc);
-        CheckTest.assertNoWarnings(oneLinePerParameter, wmc);
-        CheckTest.assertWarning("Must wrap line before 'int'", multipleParametersInOneLine, wmc);
+        csTest(WrapMethodCheck.class, allParametersInOneLine).addAttribute("allowMultipleParametersPerLine", "false").assertNoMessages();
+        csTest(WrapMethodCheck.class, oneLinePerParameter).addAttribute("allowMultipleParametersPerLine", "false").assertNoMessages();
+        csTest(WrapMethodCheck.class, multipleParametersInOneLine).addAttribute("allowMultipleParametersPerLine", "false").assertMessages("4x16: Must wrap line before 'int'");
         
-        wmc.setAllowMultipleParametersPerLine(false);
-        CheckTest.assertNoWarnings(allParametersInOneLine, wmc);
-        CheckTest.assertNoWarnings(oneLinePerParameter, wmc);
-        CheckTest.assertWarning("Must wrap line before 'int'", multipleParametersInOneLine, wmc);
-        
-        wmc.setAllowMultipleParametersPerLine(true);
-        CheckTest.assertNoWarnings(allParametersInOneLine, wmc);
-        CheckTest.assertNoWarnings(oneLinePerParameter, wmc);
-        CheckTest.assertNoWarnings(multipleParametersInOneLine, wmc);
+        csTest(WrapMethodCheck.class, allParametersInOneLine).addAttribute("allowMultipleParametersPerLine", "true").assertNoMessages();
+        csTest(WrapMethodCheck.class, oneLinePerParameter).addAttribute("allowMultipleParametersPerLine", "true").assertNoMessages();
+        csTest(WrapMethodCheck.class, multipleParametersInOneLine).addAttribute("allowMultipleParametersPerLine", "true").assertNoMessages();
     }
 
     /**
      * Test for {@link WrapMethodCheck#setAllowOneLineDecl(boolean)}.
      */
     @Test public void
-    testAllowOneLineDecl() throws CheckstyleException {
+    testAllowOneLineDecl() {
         
         String oneLineDecl = (
             ""
@@ -201,27 +183,22 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        
-        WrapMethodCheck wmc = new WrapMethodCheck();
-        
         // Default is "true".
-        CheckTest.assertNoWarnings(oneLineDecl, wmc);
-        CheckTest.assertNoWarnings(multiLineDecl, wmc);
+        csTest(WrapMethodCheck.class, oneLineDecl).assertNoMessages();
+        csTest(WrapMethodCheck.class, multiLineDecl).assertNoMessages();
         
-        wmc.setAllowOneLineDecl(false);
-        CheckTest.assertWarning("Must wrap line before 'method'", oneLineDecl, wmc);
-        CheckTest.assertNoWarnings(multiLineDecl, wmc);
+        csTest(WrapMethodCheck.class, oneLineDecl).addAttribute("allowOneLineDecl", "false").assertMessages("2x9: Must wrap line before 'method'");
+        csTest(WrapMethodCheck.class, multiLineDecl).addAttribute("allowOneLineDecl", "false").assertNoMessages();
         
-        wmc.setAllowOneLineDecl(true);
-        CheckTest.assertNoWarnings(oneLineDecl, wmc);
-        CheckTest.assertNoWarnings(multiLineDecl, wmc);
+        csTest(WrapMethodCheck.class, oneLineDecl).addAttribute("allowOneLineDecl", "true").assertNoMessages();
+        csTest(WrapMethodCheck.class, multiLineDecl).addAttribute("allowOneLineDecl", "true").assertNoMessages();
     }
 
     /**
      * Test for {@link WrapMethodCheck#setWrapDeclBeforeName(String)}.
      */
     @Test public void
-    testWrapDeclBeforeName() throws CheckstyleException {
+    testWrapDeclBeforeName() {
         
         String wrappedBeforeMethodName = (
             ""
@@ -238,22 +215,17 @@ class WrapMethodCheckTest extends TestCase {
             + "}"
         );
         
-        WrapMethodCheck wmc = new WrapMethodCheck();
-
         // Default is "always".
-        CheckTest.assertWarning("Must wrap line before 'method'", notWrappedBeforeMethodName, wmc);
-        CheckTest.assertNoWarnings(wrappedBeforeMethodName, wmc);
+        csTest(WrapMethodCheck.class, notWrappedBeforeMethodName).assertMessages("2x9: Must wrap line before 'method'");
+        csTest(WrapMethodCheck.class, wrappedBeforeMethodName).assertNoMessages();
 
-        wmc.setWrapDeclBeforeName("never");
-        CheckTest.assertNoWarnings(notWrappedBeforeMethodName, wmc);
-        CheckTest.assertWarning("'method' must appear on same line as 'int'", wrappedBeforeMethodName, wmc);
+        csTest(WrapMethodCheck.class, notWrappedBeforeMethodName).addAttribute("wrapDeclBeforeName", "never").assertNoMessages();
+        csTest(WrapMethodCheck.class, wrappedBeforeMethodName).addAttribute("wrapDeclBeforeName", "never").assertMessages("3x5: 'method' must appear on same line as 'int'");
         
-        wmc.setWrapDeclBeforeName("optional");
-        CheckTest.assertNoWarnings(notWrappedBeforeMethodName, wmc);
-        CheckTest.assertNoWarnings(wrappedBeforeMethodName, wmc);
+        csTest(WrapMethodCheck.class, notWrappedBeforeMethodName).addAttribute("wrapDeclBeforeName", "optional").assertNoMessages();
+        csTest(WrapMethodCheck.class, wrappedBeforeMethodName).addAttribute("wrapDeclBeforeName", "optional").assertNoMessages();
 
-        wmc.setWrapDeclBeforeName("always");
-        CheckTest.assertWarning("Must wrap line before 'method'", notWrappedBeforeMethodName, wmc);
-        CheckTest.assertNoWarnings(wrappedBeforeMethodName, wmc);
+        csTest(WrapMethodCheck.class, notWrappedBeforeMethodName).addAttribute("wrapDeclBeforeName", "always").assertMessages("2x9: Must wrap line before 'method'");
+        csTest(WrapMethodCheck.class, wrappedBeforeMethodName).addAttribute("wrapDeclBeforeName", "always").assertNoMessages();
     }
 }
