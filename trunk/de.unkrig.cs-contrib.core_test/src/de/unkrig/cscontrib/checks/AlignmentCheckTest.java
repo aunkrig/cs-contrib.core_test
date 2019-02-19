@@ -69,39 +69,42 @@ class AlignmentCheckTest extends CheckStyleTest {
     
     private static final String MISALIGNED = (
         ""
-        + "public class Main {\n"
+        + "public class Main {\n"                                                                    // 1
         + "\n"
         + "     int field1    = 7;\n"
         + "     double field2 = 7.0;              // Misaligned field names\n"
-        + "\n"
+        + "\n"                                                                                       // 5
         + "     int    field3 = 7;\n"
         + "     double field4  = 7.0;             // Misaligned field initializers\n"
         + "\n"
         + "     public static void meth1(\n"
-        + "         String[] param1,\n"
+        + "         String[] param1,\n"                                                              // 10
         + "         int param2                    // Misaligned parameter names\n"
         + "     ) {\n"
         + "\n"
         + "         int locvar1    = 7;\n"
-        + "         double locvar2 = 7.0;         // Misaligned local variable names\n"
+        + "         double locvar2 = 7.0;         // Misaligned local variable names\n"              // 15
         + "\n"
         + "         int    locvar1 = 7;\n"
         + "         double locvar2  = 7.0;        // Misaligned local variable initializers\n"
         + "\n"
-        + "         y = 8;\n"
+        + "         y = 8;\n"                                                                        // 20
         + "         yyy = 8.0;                    // Misaligned assignments\n"
         + "\n"
         + "         switch (x) {\n"
         + "         case 1: break;\n"
-        + "         default: x++; return;         // Misaligned case groups statements\n"
+        + "         default: x++; return;         // Misaligned case groups statements\n"            // 25
         + "         }\n"
         + "     }\n"
         + "\n"
         + "     public static void meth1() {}\n"
-        + "     public void meth2()        {}     // Misaligned method names\n"
+        + "     public void meth2()        {}     // Misaligned method names\n"                      // 30
         + "\n"
-        + "     public static void meth3() {}\n"
+        + "     public static void meth3() { }\n"
         + "     public void        meth4()  {}    // Misaligned method bodies\n"
+        + "\n"
+        + "     public static void meth5() { }\n"                                                    // 35
+        + "     public void        meth6() {}    // Misaligned method bodies\n"
         + " }"
     );
 
@@ -177,7 +180,10 @@ class AlignmentCheckTest extends CheckStyleTest {
     @Test public void
     testApplyToMethodBody() {
         csTest(Alignment.class, PROPERLY_ALIGNED).addAttributes(only("applyToMethodBody")).assertNoMessages();
-        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToMethodBody")).assertMessages("33x34: '{' should be aligned with '{' in line 32");
+        csTest(Alignment.class, MISALIGNED).addAttributes(only("applyToMethodBody")).assertMessages(
+            "33x34: '{' should be aligned with '{' in line 32",
+            "36x34: '}' should be aligned with '}' in line 35"
+        );
     }
     
     /**
