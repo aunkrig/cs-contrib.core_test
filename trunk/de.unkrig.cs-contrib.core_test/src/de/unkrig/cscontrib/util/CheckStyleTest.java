@@ -54,10 +54,20 @@ class CheckStyleTest {
 
     public
     interface CsTest {
+
         CsTest addAttribute(String name, String value);
         CsTest addAttributes(String... namesAndValues);
-        void   assertNoMessages();
-        void   assertMessages(String... expectedMessages);
+
+        /**
+         * Verifies that executing the checks does not issue any audit events.
+         */
+        void assertNoMessages();
+
+        /**
+         * Verifies that executing the checks issues a sequence of audit events, and that these events' messages
+         * equal the given <var>expectedMessages</var>..
+         */
+        void assertMessages(String... expectedMessages);
     }
 
     protected CsTest
