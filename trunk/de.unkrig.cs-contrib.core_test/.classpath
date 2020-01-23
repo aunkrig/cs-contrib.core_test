@@ -7,7 +7,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.unkrig.cs-contrib.core"/>
-	<classpathentry kind="lib" path="libs/checkstyle-8.21.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cs-contrib"/>
+	<classpathentry kind="lib" path="libs/checkstyle-8.21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
