@@ -59,6 +59,17 @@ class JavaTest extends CheckStyleTest {
     }
 
     @Test public void
+    testSemi() throws CheckstyleException {
+    	
+    	csTest(Whitespace.class, (
+			""
+			+ "; // <- das hier erzeugt das Problem\n"
+			+ "public class TestBug {\n"
+			+ "}\n"
+		)).assertNoMessages();
+    }
+
+    @Test public void
     testInterfaceDefaultMethod() throws CheckstyleException {
 
         csTest(Whitespace.class, (
